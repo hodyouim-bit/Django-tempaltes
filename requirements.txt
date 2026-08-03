@@ -1,6 +1,8 @@
-Django>5
-whitenoise
-dj-database-url
-psycopg[binary]
-gunicorn
-python-dotenv
+django>=5.0
+gunicorn==21.2.0
+whitenoise==6.6.0
+dj-database-url==2.1.0
+psycopg[binary]==3.1.18
+python-dotenv==1.0.0
+django-widget-tweaks==1.4.12
+pip-system-certs==4.0.6
