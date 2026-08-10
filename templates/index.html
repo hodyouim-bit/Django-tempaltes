@@ -15,6 +15,7 @@
         <th>st_id</th>
         <th>fname</th>
         <th>lname</th>
+        <th>Major</th>
     </tr>
   </thead>
   <tbody>
@@ -25,10 +26,12 @@
         <td>{{ s.st_id }}</td>
         <td>{{ s.fname }}</td>
         <td>{{ s.lname }}</td>
+        <td>{{ s.mj_id.mj_name }}</td>
+        <td> Major id: {{ s.mj_id.id }}</td>
     </tr>
     {% empty %}
     <tr>
-        <td colspan="5" class="text-center text-muted">No student records found.</td>
+        <td colspan="6" class="text-center text-muted">No student records found.</td>
     </tr>
     {% endfor %}
   </tbody>
