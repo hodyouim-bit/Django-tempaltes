@@ -12,4 +12,9 @@ urlpatterns = [
     path("student/<int:pk>/", views.Student_detail, name="Student_detail"),
     path("student/<int:pk>/edit/", views.student_update, name="student_update"),
     path("student/<int:pk>/delete/", views.student_delete, name="student_delete"),
+    path("subject/", views.subject_list, name="subject_list"),
+    path("subject/create/", views.subject_create, name="subject_create"),
+    path("subject/<int:pk>/", views.subject_detail, name="subject_detail"),
+    path("subject/<int:pk>/edit/", views.subject_update, name="subject_update"),
+    path("subject/<int:pk>/delete/", views.subject_delete, name="subject_delete"),
 ]

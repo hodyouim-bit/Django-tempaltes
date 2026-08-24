@@ -31,3 +31,23 @@ class student(models.Model):
 
     def get_absolute_url(self):
         return reverse("Student_detail", kwargs={"pk": self.pk})
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, blank=False, verbose_name="หมวดหมู่")
+
+    def __str__(self):
+        return self.name
+
+
+class Subject(models.Model):
+    sub_code = models.CharField(max_length=20, unique=True, blank=False, verbose_name="รหัสวิชา")
+    sub_name = models.CharField(max_length=200, blank=False, verbose_name="ชื่อวิชา")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="หมวดหมู่")
+
+    def __str__(self):
+        return f"{self.sub_code} - {self.sub_name}"
+
+    def get_absolute_url(self):
+        return reverse("subject_detail", kwargs={"pk": self.pk})
+

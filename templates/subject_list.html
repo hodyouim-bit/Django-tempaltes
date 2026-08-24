@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+        <h1>{{ title }}</h1>
+        <a href="{% url 'subject_create' %}" class="btn btn-success">
+            <i class="fas fa-plus-circle me-1"></i> เพิ่มรายวิชาใหม่
+        </a>
+    </div>
+
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">หน้าแรก</a></li>
+        <li class="breadcrumb-item active">{{ title }} - ประจำวันที่ {{ date }}</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-book me-1"></i> รายชื่อวิชาทั้งหมด</span>
+            <span class="badge bg-secondary">จำนวนทั้งหมด {{ subjects|length }} รายการ</span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">รหัสวิชา</th>
+                            <th scope="col">ชื่อรายวิชา</th>
+                            <th scope="col">หมวดหมู่</th>
+                            <th scope="col" class="text-center">จัดการข้อมูล</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in subjects %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                <a href="{% url 'subject_detail' s.pk %}" class="fw-bold text-decoration-none text-primary">
+                                    {{ s.sub_code }}
+                                </a>
+                            </td>
+                            <td>{{ s.sub_name }}</td>
+                            <td><span class="badge bg-secondary">{{ s.category.name }}</span></td>
+                            <td class="text-center">
+                                <div class="btn-group btn-group-sm" role="group" aria-label="Subject actions">
+                                    <a href="{% url 'subject_detail' s.pk %}" class="btn btn-outline-info" title="ดูรายละเอียด">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'subject_update' s.pk %}" class="btn btn-outline-warning" title="แก้ไข">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'subject_delete' s.pk %}" class="btn btn-outline-danger" title="ลบ">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="fas fa-book-open fa-2x mb-2 d-block"></i>
+                                ยังไม่มีข้อมูลรายวิชาในระบบ
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
