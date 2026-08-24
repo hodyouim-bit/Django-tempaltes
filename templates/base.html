@@ -50,7 +50,9 @@
                             </a>
                             <div class="sb-sidenav-menu-heading">Student Management</div>
                             <a class="nav-link" href="{% url 'home' %}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                <div class="sb-nav-link-icon">
+                                    <img src="{% static 'assets/img/student_icon.jpg' %}" alt="Icon" style="width: 22px; height: 22px; object-fit: cover; border-radius: 4px;">
+                                </div>
                                 Student List
                             </a>
                             <a class="nav-link" href="{% url 'student_create' %}">
