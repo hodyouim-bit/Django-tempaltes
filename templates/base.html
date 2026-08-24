@@ -27,15 +27,25 @@
             </form>
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+                {% if user.is_authenticated %}
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user fa-fw"></i> {{ user.username }}
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#!">Settings</a></li>
-                        <li><a class="dropdown-item" href="#!">Activity Log</a></li>
-                        <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt me-1"></i> ออกจากระบบ (Logout)</a></li>
                     </ul>
                 </li>
+                {% else %}
+                <li class="nav-item d-flex align-items-center">
+                    <a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
+                        <i class="fas fa-sign-in-alt me-1"></i> Login
+                    </a>
+                    <a class="btn btn-success btn-sm" href="{% url 'register' %}">
+                        <i class="fas fa-user-plus me-1"></i> Sign Up
+                    </a>
+                </li>
+                {% endif %}
             </ul>
         </nav>
         <div id="layoutSidenav">
@@ -77,11 +87,30 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-envelope"></i></div>
                                 Contact
                             </a>
+                            {% if user.is_authenticated %}
+                            <a class="nav-link text-danger" href="{% url 'logout' %}">
+                                <div class="sb-nav-link-icon text-danger"><i class="fas fa-sign-out-alt"></i></div>
+                                Logout
+                            </a>
+                            {% else %}
+                            <a class="nav-link" href="{% url 'login' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-sign-in-alt"></i></div>
+                                Login
+                            </a>
+                            <a class="nav-link" href="{% url 'register' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                                Sign Up
+                            </a>
+                            {% endif %}
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        {% if user.is_authenticated %}
+                        <span class="text-white fw-bold"><i class="fas fa-user-circle me-1"></i> {{ user.username }}</span>
+                        {% else %}
+                        <span class="text-muted"><i class="fas fa-user-slash me-1"></i> Guest (ไม่ได้ล็อกอิน)</span>
+                        {% endif %}
                     </div>
                 </nav>
             </div>

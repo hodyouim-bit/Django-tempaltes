@@ -1,8 +1,72 @@
 import datetime
+from functools import wraps
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+
 from web.models import student, Subject, Category
-from web.forms import StudentForm, SubjectForm, CategoryForm
+from web.forms import StudentForm, SubjectForm, CategoryForm, UserLoginForm, UserRegisterForm
+
+
+def admin_required(view_func):
+    @wraps(view_func)
+    @login_required
+    def _wrapped_view(request, *args, **kwargs):
+        if not (request.user.is_staff or request.user.is_superuser):
+            raise PermissionDenied("สำหรับแอดมินเท่านั้น (Admin Only)")
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+
+def user_login(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+
+    if request.method == "POST":
+        form = UserLoginForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            next_url = request.GET.get("next", "home")
+            return redirect(next_url)
+    else:
+        form = UserLoginForm()
+
+    context = {
+        "title": "เข้าสู่ระบบ (Login)",
+        "form": form,
+        "date": datetime.date.today(),
+    }
+    return render(request, "registration/login.html", context)
+
+
+def user_register(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("home")
+    else:
+        form = UserRegisterForm()
+
+    context = {
+        "title": "สมัครสมาชิก (Sign Up / Register)",
+        "form": form,
+        "date": datetime.date.today(),
+    }
+    return render(request, "registration/register.html", context)
+
+
+def user_logout(request):
+    logout(request)
+    return redirect("home")
 
 
 def index(request):
@@ -32,11 +96,11 @@ def Student_detail(request, pk):
     return render(request, "student_datail.html", context)
 
 
+@admin_required
 def student_create(request):
-    if request.method == "POST":    
+    if request.method == "POST":
         form = StudentForm(request.POST)
         if form.is_valid():
-            print(request.POST) 
             new_student = form.save()
             return redirect("Student_detail", pk=new_student.pk)
     else:
@@ -51,6 +115,7 @@ def student_create(request):
     return render(request, "student_form.html", context)
 
 
+@admin_required
 def student_update(request, pk):
     std = get_object_or_404(student, pk=pk)
     if request.method == "POST":
@@ -71,6 +136,7 @@ def student_update(request, pk):
     return render(request, "student_form.html", context)
 
 
+@admin_required
 def student_delete(request, pk):
     std = get_object_or_404(student, pk=pk)
     if request.method == "POST":
@@ -87,7 +153,7 @@ def student_delete(request, pk):
 
 # Subject Views
 def subject_list(request):
-    subjects = Subject.objects.select_related('category').all().order_by('id')
+    subjects = Subject.objects.select_related("category").all().order_by("id")
     context = {
         "title": "รายชื่อวิชา",
         "date": datetime.date.today(),
@@ -106,6 +172,7 @@ def subject_detail(request, pk):
     return render(request, "subject_detail.html", context)
 
 
+@admin_required
 def subject_create(request):
     if request.method == "POST":
         form = SubjectForm(request.POST)
@@ -124,6 +191,7 @@ def subject_create(request):
     return render(request, "subject_form.html", context)
 
 
+@admin_required
 def subject_update(request, pk):
     sub = get_object_or_404(Subject, pk=pk)
     if request.method == "POST":
@@ -144,6 +212,7 @@ def subject_update(request, pk):
     return render(request, "subject_form.html", context)
 
 
+@admin_required
 def subject_delete(request, pk):
     sub = get_object_or_404(Subject, pk=pk)
     if request.method == "POST":
@@ -156,6 +225,3 @@ def subject_delete(request, pk):
         "date": datetime.date.today(),
     }
     return render(request, "subject_confirm_delete.html", context)
-
-
-

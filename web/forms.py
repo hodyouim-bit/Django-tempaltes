@@ -1,5 +1,8 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from .models import student, Subject, Category
+
 
 class StudentForm(forms.ModelForm):
     class Meta:
@@ -47,3 +50,48 @@ class CategoryForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'เช่น วิชาบังคับ'}),
         }
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label="ชื่อผู้ใช้ (Username)",
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ระบุชื่อผู้ใช้'})
+    )
+    password = forms.CharField(
+        label="รหัสผ่าน (Password)",
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'ระบุรหัสผ่าน'})
+    )
+
+
+class UserRegisterForm(UserCreationForm):
+    first_name = forms.CharField(
+        label="ชื่อจริง (First Name)",
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ระบุชื่อจริง'})
+    )
+    last_name = forms.CharField(
+        label="นามสกุล (Last Name)",
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ระบุนามสกุล'})
+    )
+    email = forms.EmailField(
+        label="อีเมล (Email)",
+        required=True,
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'เช่น name@example.com'})
+    )
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
+        labels = {
+            'username': 'ชื่อผู้ใช้ (Username)',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+            if name == 'username':
+                field.widget.attrs['placeholder'] = 'ตั้งชื่อผู้ใช้สำหรับเข้าสู่ระบบ'
+
+

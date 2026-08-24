@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container px-4 py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow-lg border-0 rounded-lg mt-4">
+                <div class="card-header bg-success text-white text-center py-4">
+                    <h3 class="font-weight-light my-1"><i class="fas fa-user-plus me-2"></i>ลงทะเบียนผู้ใช้ใหม่ (Register New User)</h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                        <div class="alert alert-danger mb-3">
+                            <i class="fas fa-exclamation-circle me-1"></i> โปรดตรวจสอบข้อมูลและแก้ไขข้อผิดพลาดด้านล่าง
+                        </div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label font-weight-bold">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted small">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <a class="btn btn-secondary" href="{% url 'home' %}">
+                                <i class="fas fa-arrow-left me-1"></i> หน้าแรก
+                            </a>
+                            <button type="submit" class="btn btn-success px-4">
+                                <i class="fas fa-user-check me-1"></i> ยืนยันลงทะเบียน
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center py-3 bg-light">
+                    <div class="small">
+                        <a href="{% url 'login' %}" class="text-decoration-none">มีบัญชีผู้ใช้อยู่แล้ว? เข้าสู่ระบบ (Login)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
