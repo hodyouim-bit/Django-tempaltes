@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">{{ title }}</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'subject_list' %}">รายชื่อวิชา</a></li>
+        <li class="breadcrumb-item active">{{ title }}</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white">
+            <i class="fas {% if is_edit %}fa-edit{% else %}fa-plus-circle{% endif %} me-1"></i>
+            {% if is_edit %}แก้ไขข้อมูลรายวิชา: {{ subject.sub_code }} {{ subject.sub_name }}{% else %}แบบฟอร์มเพิ่มรายวิชาใหม่{% endif %}
+        </div>
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="{{ form.sub_code.id_for_label }}" class="form-label font-weight-bold">{{ form.sub_code.label }}</label>
+                        {{ form.sub_code }}
+                        {% if form.sub_code.errors %}
+                            <div class="text-danger small mt-1">{{ form.sub_code.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <label for="{{ form.sub_name.id_for_label }}" class="form-label font-weight-bold">{{ form.sub_name.label }}</label>
+                        {{ form.sub_name }}
+                        {% if form.sub_name.errors %}
+                            <div class="text-danger small mt-1">{{ form.sub_name.errors.0 }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="{{ form.category.id_for_label }}" class="form-label font-weight-bold">{{ form.category.label }}</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <div class="text-danger small mt-1">{{ form.category.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between pt-2">
+                    <a href="{% url 'subject_list' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> ยกเลิก
+                    </a>
+                    <button type="submit" class="btn btn-success px-4">
+                        <i class="fas fa-save me-1"></i> บันทึกข้อมูล
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

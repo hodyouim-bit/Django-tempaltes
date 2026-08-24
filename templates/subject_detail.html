@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid px-4">
+    <h1 class="mt-4">{{ title }}</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">หน้าแรก</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'subject_list' %}">รายชื่อวิชา</a></li>
+        <li class="breadcrumb-item active">รายละเอียดวิชา</li>
+    </ol>
+
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-book-open me-2"></i> ข้อมูลรายวิชา: {{ subject.sub_code }} {{ subject.sub_name }}</span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 text-center mb-3">
+                    <div class="bg-light p-4 rounded border">
+                        <i class="fas fa-graduation-cap fa-5x text-success mb-2"></i>
+                        <h4 class="mt-2 text-primary">{{ subject.sub_code }}</h4>
+                        <span class="badge bg-secondary fs-6">{{ subject.category.name }}</span>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <table class="table table-bordered align-middle">
+                        <tbody>
+                            <tr>
+                                <th style="width: 25%;" class="bg-light">รหัสวิชา</th>
+                                <td><strong class="text-primary fs-5">{{ subject.sub_code }}</strong></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">ชื่อรายวิชา</th>
+                                <td><span class="fs-5">{{ subject.sub_name }}</span></td>
+                            </tr>
+                            <tr>
+                                <th class="bg-light">หมวดหมู่วิชา</th>
+                                <td><span class="badge bg-info text-dark fs-6">{{ subject.category.name }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center bg-light">
+            <a href="{% url 'subject_list' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> ย้อนกลับ
+            </a>
+            <div>
+                <a href="{% url 'subject_update' subject.pk %}" class="btn btn-warning me-2">
+                    <i class="fas fa-edit me-1"></i> แก้ไขข้อมูล
+                </a>
+                <a href="{% url 'subject_delete' subject.pk %}" class="btn btn-danger">
+                    <i class="fas fa-trash-alt me-1"></i> ลบข้อมูล
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
