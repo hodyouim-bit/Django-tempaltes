@@ -48,6 +48,16 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
                                 Home
                             </a>
+                            <div class="sb-sidenav-menu-heading">Student Management</div>
+                            <a class="nav-link" href="{% url 'home' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
+                                Student List
+                            </a>
+                            <a class="nav-link" href="{% url 'student_create' %}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
+                                Add Student
+                            </a>
+                            <div class="sb-sidenav-menu-heading">Information</div>
                             <a class="nav-link" href="{% url 'about' %}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-info-circle"></i></div>
                                 About
